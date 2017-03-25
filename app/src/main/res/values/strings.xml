@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Gallery</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_view_album">ViewAlbumActivity</string>
+
+    <string name="title_activity_view_image">ViewImageActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_image_details">ImageDetailsActivity</string>
+    <string name="title_activity_filter">FilterActivity</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_place_picker">PlacePickerActivity</string>
+    <string name="title_activity_current_place">CurrentPlaceActivity</string>
+
+    <string name="google_api_key">AIzaSyC9bic-AaKWI3ku6Y_iZfBmsX5E3zgJXKE</string>
+</resources>

@@ -1,0 +1,56 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.hp.gallery.MainActivity">
+    <item
+        android:id="@+id/ma_menu_album"
+        android:orderInCategory="100"
+        android:title="Album"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ma_menu_date"
+        android:orderInCategory="102"
+        android:title="Date"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ma_menu_event"
+        android:orderInCategory="103"
+        android:title="Event"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ma_menu_loc"
+        android:orderInCategory="104"
+        android:title="Location"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ma_menu_people"
+        android:orderInCategory="101"
+        android:title="People"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ma_menu_sync_people"
+        android:orderInCategory="105"
+        android:title="Sync People"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/maps_activity"
+        android:orderInCategory="106"
+        android:title="Fetch Nearby Labs"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/ma_menu_search"
+        android:orderInCategory="99"
+        android:title="Search"
+        app:showAsAction="collapseActionView|ifRoom"
+        android:actionViewClass="android.widget.SearchView"
+        android:icon="@drawable/ic_search_white_24dp"/>
+
+</menu>

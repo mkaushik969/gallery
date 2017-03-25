@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.hp.gallery.ImageDetailsActivity"
+    tools:showIn="@layout/activity_image_details"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:scaleType="center"
+        android:id="@+id/ida_iv"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:text="Path"
+                    style="@style/detailstv"
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/ida_pathtv"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@+id/ida_pathtv"
+                    android:id="@+id/ida_tv1"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_margin="5dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:text="Date"
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/ida_datetv"
+                    style="@style/detailstv"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:layout_toRightOf="@+id/ida_datetv"
+                    android:id="@+id/ida_tv2"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:text="Event"
+                    android:id="@+id/ida_eventtv"
+                    style="@style/detailstv"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    style="@style/detailstv"
+                    android:layout_toLeftOf="@+id/ida_ib3"
+                    android:layout_toRightOf="@+id/ida_eventtv"
+                    android:id="@+id/ida_tv3"/>
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ida_ib3"
+                    android:src="@drawable/ic_edit_black_24dp"
+                    android:layout_alignParentRight="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:text="Location"
+                    style="@style/detailstv"
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/ida_loctv"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    style="@style/detailstv"
+                    android:layout_toRightOf="@+id/ida_loctv"
+                    android:layout_toLeftOf="@+id/ida_ib4"
+                    android:id="@+id/ida_tv4"/>
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ida_ib4"
+                    android:src="@drawable/ic_edit_black_24dp"
+                    android:layout_alignParentRight="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:text="People"
+                    style="@style/detailstv"
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/ida_peopletv"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    style="@style/detailstv"
+                    android:id="@+id/ida_tv5"
+                    android:text="no taggged people"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/ida_ib5"
+                    android:layout_toRightOf="@+id/ida_peopletv" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ida_ib5"
+                    android:src="@drawable/ic_edit_black_24dp"
+                    android:layout_alignParentRight="true"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

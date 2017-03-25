@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_filter"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.hp.gallery.FilterActivity"
+    tools:showIn="@layout/activity_filter"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/fa_path_tv"
+        android:text="Choose one category"/>
+
+  <ViewFlipper
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:id="@+id/fa_vf">
+
+      <android.support.v7.widget.RecyclerView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:id="@+id/fa_rv"/>
+
+      <ListView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:id="@+id/fa_list1"/>
+
+      <ListView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:id="@+id/fa_list2"/>
+
+      <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:orientation="vertical">
+      <ListView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:id="@+id/fa_list3"/>
+          <Button
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="Ok"
+              android:layout_alignParentBottom="true"
+              android:id="@+id/fa_list3_btn"/>
+      </RelativeLayout>
+  </ViewFlipper>
+
+
+
+</LinearLayout>

@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             else
                 Toast.makeText(this, "saved", Toast.LENGTH_LONG).show();
 
-          //  startService(new Intent(this,FaceDetectorService.class));
+            //  startService(new Intent(this,FaceDetectorService.class));
 
       /*      FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
             final FloatingActionButton fabm1 = (FloatingActionButton) findViewById(R.id.fabmenu1);
@@ -177,13 +177,13 @@ public class MainActivity extends AppCompatActivity {
 
 
             if(type.equals("date"))
-                {
-                    Calendar calendar=Calendar.getInstance();
-                    String col1[] = {MediaStore.Images.Media.DATE_ADDED,MediaStore.Images.Media.DATA};
-                    cursor1 = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, col1, null, null,MediaStore.Images.Media.DATE_ADDED+" desc");
+            {
+                Calendar calendar=Calendar.getInstance();
+                String col1[] = {MediaStore.Images.Media.DATE_ADDED,MediaStore.Images.Media.DATA};
+                cursor1 = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, col1, null, null,MediaStore.Images.Media.DATE_ADDED+" desc");
 
-                    if(cursor1.moveToFirst())
-                    {
+                if(cursor1.moveToFirst())
+                {
                         /*calendar.setTimeInMillis(Long.valueOf(cursor.getString(0)));
                         calendars.add(calendar);
                         paths.add(cursor.getString(1));
@@ -192,89 +192,88 @@ public class MainActivity extends AppCompatActivity {
                             calendar.setTimeInMillis(Long.valueOf(cursor.getString(0)));
                         }*/
 
-                        db.execSQL("drop table if exists temp");
-                        db.execSQL("create table if not exists temp (dates varchar(15),paths text)");
-                        do {
-                            calendar.setTimeInMillis(Long.valueOf(cursor1.getString(0)));
-                            ContentValues contentValues=new ContentValues();
-                            contentValues.put("dates",(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.YEAR));
-                            contentValues.put("paths",cursor1.getString(1));
-                            db.insert("temp",null,contentValues);
-                        }while (cursor1.moveToNext());
+                    db.execSQL("drop table if exists temp");
+                    db.execSQL("create table if not exists temp (dates varchar(15),paths text)");
+                    do {
+                        calendar.setTimeInMillis(Long.valueOf(cursor1.getString(0)));
+                        ContentValues contentValues=new ContentValues();
+                        contentValues.put("dates",(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.YEAR));
+                        contentValues.put("paths",cursor1.getString(1));
+                        db.insert("temp",null,contentValues);
+                    }while (cursor1.moveToNext());
 
-                        cursor=db.rawQuery("select distinct dates from temp",null);
-                        cursor.moveToFirst();
-                        do {
-                            //paths.add(cursor.getString(1));
-                            Toast.makeText(this,cursor.getString(0),Toast.LENGTH_SHORT).show();
+                    cursor=db.rawQuery("select distinct dates from temp",null);
+                    cursor.moveToFirst();
+                    do {
+                        //paths.add(cursor.getString(1));
+                        Toast.makeText(this,cursor.getString(0),Toast.LENGTH_SHORT).show();
 
-                        }while (cursor.moveToNext());
+                    }while (cursor.moveToNext());
 
-                    }
-                    else
-                        Toast.makeText(this,"Not found",Toast.LENGTH_SHORT).show();
+                }
+                else
+                    Toast.makeText(this,"Not found",Toast.LENGTH_SHORT).show();
 
 
 //                    Toast.makeText(this,"Month:"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.YEAR),Toast.LENGTH_SHORT).show();
-                }
-                else if(type.equals("albums"))
+            }
+            else if(type.equals("albums"))
+            {
+                String col1[] = {"distinct " + MediaStore.Images.Media.BUCKET_DISPLAY_NAME};
+                cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, col1, null, null, MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+                if(cursor.moveToFirst())
                 {
-                    String col1[] = {"distinct " + MediaStore.Images.Media.BUCKET_DISPLAY_NAME};
-                    cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, col1, null, null, MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
-                    if(cursor.moveToFirst())
-                    {
-                        do {
-                            String cname = cursor.getString(0);
-                            if (cname.contains("'"))
-                                cname = cname.replace("'", "''");
+                    do {
+                        String cname = cursor.getString(0);
+                        if (cname.contains("'"))
+                            cname = cname.replace("'", "''");
 
-                            cursor1 = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[]{MediaStore.Images.Media.DATA}, MediaStore.Images.Media.BUCKET_DISPLAY_NAME + " ='" + cname + "'", null, MediaStore.Images.Media.BUCKET_DISPLAY_NAME+ " LIMIT 1");
-                            if (cursor1.moveToFirst())
-                                paths.add(cursor1.getString(0));
-                        } while (cursor.moveToNext());
-                    }
-                    else
-                        Toast.makeText(this,"Not found",Toast.LENGTH_SHORT).show();
-
+                        cursor1 = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[]{MediaStore.Images.Media.DATA}, MediaStore.Images.Media.BUCKET_DISPLAY_NAME + " ='" + cname + "'", null, MediaStore.Images.Media.BUCKET_DISPLAY_NAME+ " LIMIT 1");
+                        if (cursor1.moveToFirst())
+                            paths.add(cursor1.getString(0));
+                    } while (cursor.moveToNext());
                 }
-                else if (type.equals("event") || type.equals("location"))
-                {
+                else
+                    Toast.makeText(this,"Not found",Toast.LENGTH_SHORT).show();
 
-                    cursor=db.rawQuery("select distinct "+ type +" from Images",null);
+            }
+            else if (type.equals("event") || type.equals("location"))
+            {
+                cursor=db.rawQuery("select distinct "+ type +" from Images",null);
 /*                    if(cursor.moveToFirst())
                         Toast.makeText(this,"event:"+cursor.getString(0),Toast.LENGTH_SHORT).show();
                     else
                         Toast.makeText(this,"not found",Toast.LENGTH_SHORT).show();
 */
-                    if(cursor.moveToFirst()) {
-                        do {
-                            String cname = cursor.getString(0);
-                            if (cname.contains("'"))
-                                cname = cname.replace("'", "''");
+                if(cursor.moveToFirst()) {
+                    do {
+                        String cname = cursor.getString(0);
+                        if (cname.contains("'"))
+                            cname = cname.replace("'", "''");
 
-                            Cursor temp=db.rawQuery("select IId from Images where "+type+"='"+cname+"' LIMIT 1",null);
+                        Cursor temp=db.rawQuery("select IId from Images where "+type+"='"+cname+"' LIMIT 1",null);
 /*                            if(temp.moveToFirst())
                                 Toast.makeText(this,"temp:"+temp.getString(0)+" count:"+temp.getCount(),Toast.LENGTH_SHORT).show();
                             else
                                 Toast.makeText(this,"Not found temp",Toast.LENGTH_SHORT).show();
 */
-                            temp.moveToFirst();
-                            cursor1 = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[]{MediaStore.Images.Media.DATA}, MediaStore.Images.Media._ID + " =" + temp.getString(0) , null,null);
+                        temp.moveToFirst();
+                        cursor1 = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[]{MediaStore.Images.Media.DATA}, MediaStore.Images.Media._ID + " =" + temp.getString(0) , null,null);
 
-                            if (cursor1.moveToFirst())
-                            {
-                               // Toast.makeText(this,"path:"+cursor1.getString(0),Toast.LENGTH_SHORT).show();
-                                paths.add(cursor1.getString(0));
-                            }
-                            else
-                            {
-                                Toast.makeText(this,"Not found path",Toast.LENGTH_SHORT).show();
-                            }
-                        } while (cursor.moveToNext());
-                    }
-                    else
-                        Toast.makeText(this,"Not found",Toast.LENGTH_SHORT).show();
+                        if (cursor1.moveToFirst())
+                        {
+                            // Toast.makeText(this,"path:"+cursor1.getString(0),Toast.LENGTH_SHORT).show();
+                            paths.add(cursor1.getString(0));
+                        }
+                        else
+                        {
+                            Toast.makeText(this,"Not found path",Toast.LENGTH_SHORT).show();
+                        }
+                    } while (cursor.moveToNext());
                 }
+                else
+                    Toast.makeText(this,"Not found",Toast.LENGTH_SHORT).show();
+            }
             else if(type.equals("people"))
             {
                 cursor=db.rawQuery("select name,PId from People",null);
@@ -303,12 +302,12 @@ public class MainActivity extends AppCompatActivity {
             cursor=null;
             cursor1=null;
 
-         //   progressDialog.dismiss();
+            //   progressDialog.dismiss();
         }
         catch (Exception e)
         {
             Toast.makeText(this,"setup:"+e.getMessage(),Toast.LENGTH_SHORT).show();
-          //  progressDialog.dismiss();
+            //  progressDialog.dismiss();
         }
     }
 
@@ -327,43 +326,43 @@ public class MainActivity extends AppCompatActivity {
 //            final int colindex1 = cursor2.getColumnIndexOrThrow(MediaStore.Images.Media._ID);
 
 
-            if(cursor2.moveToFirst())
-            {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(MainActivity.this,"Synching",Toast.LENGTH_SHORT).show();
-                    }
-                });
+                if(cursor2.moveToFirst())
+                {
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this,"Synching",Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
-                do {
+                    do {
 
-                    MyImage image=new MyImage(MainActivity.this,cursor2.getString(0));
-                    image.create();
+                        MyImage image=new MyImage(MainActivity.this,cursor2.getString(0));
+                        image.create();
 
 
-                }while (cursor2.moveToNext());
+                    }while (cursor2.moveToNext());
 
-                editor.putBoolean("saved",true);
-                editor.apply();
+                    editor.putBoolean("saved",true);
+                    editor.apply();
 
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(MainActivity.this,"Synched",Toast.LENGTH_SHORT).show();
-                    }
-                });
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this,"Synched",Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
-            }
+                }
                 else
-            {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(MainActivity.this,"not importing",Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+                {
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this,"not importing",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
 
             }
             catch (Exception e)

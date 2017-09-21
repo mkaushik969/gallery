@@ -31,6 +31,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -73,8 +74,7 @@
         <activity
             android:name=".PlacePickerActivity"
             android:label="@string/title_activity_place_picker"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -83,7 +83,8 @@
         <activity
             android:name=".CurrentPlaceActivity"
             android:label="@string/title_activity_current_place"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".SharingTesting"></activity>
     </application>
 
 </manifest>

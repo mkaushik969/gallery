@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -50,6 +51,7 @@ public class ViewAlbumActivity extends AppCompatActivity {
 
             final Intent intent=getIntent();
             viewType=intent.getStringExtra("type");
+
 
             gridView=(GridView)findViewById(R.id.vaa_gv);
 
@@ -234,10 +236,17 @@ public class ViewAlbumActivity extends AppCompatActivity {
 //            gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 //                @Override
 //                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//                    Uri uri=Uri.parse(gridView.getItemAtPosition(position).toString());
-//                    Toast.makeText(ViewAlbumActivity.this, uri.toString(), Toast.LENGTH_SHORT).show();
+//
+//                    String path = String.valueOf(gridView.getItemAtPosition(position));
+//                    Uri imageURI=Uri.parse(path);
 //
 //
+//                    Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+//                    Uri screenshotUri = Uri.parse(imageURI.toString());
+//
+//                    sharingIntent.setType("image/png");
+//                    sharingIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
+//                    startActivity(Intent.createChooser(sharingIntent, "Share image using"));
 //                    //Uri uri=Uri.fromFile(new File())
 //                    //Toast.makeText(ViewAlbumActivity.this, uri.toString() , Toast.LENGTH_SHORT).show();
 //
@@ -252,7 +261,7 @@ public class ViewAlbumActivity extends AppCompatActivity {
 
 gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
     @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+    public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
         CharSequence options[]=new CharSequence[]{"Move","Copy","Share"};
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(ViewAlbumActivity.this);
         Toast.makeText(ViewAlbumActivity.this, "Long clicked", Toast.LENGTH_SHORT).show();
@@ -266,6 +275,18 @@ gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 if(which==1)
                 {
                     Toast.makeText(ViewAlbumActivity.this, "Second item clicked", Toast.LENGTH_SHORT).show();
+                }
+                if(which==2)
+                {
+                    String path = String.valueOf(gridView.getItemAtPosition(position));
+                    Uri imageURI=Uri.parse(path);
+
+                    Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                    Uri screenshotUri = Uri.parse(imageURI.toString());
+
+                    sharingIntent.setType("image/png");
+                    sharingIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
+                    startActivity(Intent.createChooser(sharingIntent, "Share image using"));
                 }
             }
         }).show();

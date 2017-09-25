@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,6 +26,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -38,12 +41,16 @@ public class ViewAlbumActivity extends AppCompatActivity {
 
     Uri imageURI = null;
 
+    private GoogleApiClient mGoogleApiClient;
+    private Bitmap mBitmapToSave;
+
     public static final int GALLERY_INTENT=1234;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try
         {
+
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_view_album);
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -233,31 +240,7 @@ public class ViewAlbumActivity extends AppCompatActivity {
             getSupportActionBar().setSubtitle(arrayList.size()+"");
 
             gridView.setLongClickable(true);
-//            gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//                @Override
-//                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//                    String path = String.valueOf(gridView.getItemAtPosition(position));
-//                    Uri imageURI=Uri.parse(path);
-//
-//
-//                    Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-//                    Uri screenshotUri = Uri.parse(imageURI.toString());
-//
-//                    sharingIntent.setType("image/png");
-//                    sharingIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
-//                    startActivity(Intent.createChooser(sharingIntent, "Share image using"));
-//                    //Uri uri=Uri.fromFile(new File())
-//                    //Toast.makeText(ViewAlbumActivity.this, uri.toString() , Toast.LENGTH_SHORT).show();
-//
-////          ImageView.setImageURI(Uri.fromFile(new File("/sdcard/cats.jpg")));
-////                    Intent galleryIntent;
-////                    galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
-////                    galleryIntent.setType("image/*");
-////                    startActivityForResult(galleryIntent, GALLERY_INTENT);
-//                    return true;
-//                }
-//            });
+
 
 gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
     @Override

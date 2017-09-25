@@ -8,8 +8,6 @@
     tools:context="com.example.hp.gallery.ViewAlbumActivity"
     tools:showIn="@layout/activity_view_album"
     android:numColumns="2"
-    android:verticalSpacing="5dp"
-    android:horizontalSpacing="5dp"
     android:gravity="center"
     android:layout_gravity="center"
     android:layout_margin="5dp"

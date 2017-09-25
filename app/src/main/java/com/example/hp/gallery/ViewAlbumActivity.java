@@ -1,21 +1,34 @@
 package com.example.hp.gallery;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.annotation.IntegerRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -26,21 +39,30 @@ public class ViewAlbumActivity extends AppCompatActivity {
     ArrayList<String> arrayList;
     String album,viewType;
 
+    Uri imageURI = null;
+
+    private GoogleApiClient mGoogleApiClient;
+    private Bitmap mBitmapToSave;
+
+    public static final int GALLERY_INTENT=1234;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try
         {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_album);;
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        Intent intent=getIntent();
-        viewType=intent.getStringExtra("type");
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_view_album);
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
 
-        gridView=(GridView)findViewById(R.id.vaa_gv);
+            final Intent intent=getIntent();
+            viewType=intent.getStringExtra("type");
 
-        SQLiteDatabase db=openOrCreateDatabase("Gallery",MODE_PRIVATE,null);
+
+            gridView=(GridView)findViewById(R.id.vaa_gv);
+
+            SQLiteDatabase db=openOrCreateDatabase("Gallery",MODE_PRIVATE,null);
 
             arrayList=new ArrayList<>();
 
@@ -52,6 +74,7 @@ public class ViewAlbumActivity extends AppCompatActivity {
                 if(cursor.moveToFirst()) {
                     do {
                         arrayList.add(cursor.getString(0));
+                        Toast.makeText(this, "View Act:"+cursor.getString(0), Toast.LENGTH_SHORT).show();
                     } while (cursor.moveToNext());
                 }
                 else
@@ -67,7 +90,7 @@ public class ViewAlbumActivity extends AppCompatActivity {
             else if(viewType.equals("location") || viewType.equals("event"))
             {
                 album=intent.getStringExtra("name");
-                 cursor=db.rawQuery("select IId from Images where "+viewType+"='"+album+"'",null);
+                cursor=db.rawQuery("select IId from Images where "+viewType+"='"+album+"'",null);
                 if(cursor.moveToFirst())
                 {
                     cursor1=getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,new String[]{MediaStore.Images.Media.DATA},MediaStore.Images.Media._ID+" in("+makePlaceholders(cursor)+")", null,null);
@@ -75,6 +98,7 @@ public class ViewAlbumActivity extends AppCompatActivity {
                     {
                         do {
                             arrayList.add(cursor1.getString(0));
+                            //    Toast.makeText(this, "View Act: "+cursor1.getString(0), Toast.LENGTH_SHORT).show();
                         } while (cursor1.moveToNext());
                     }
                     else
@@ -150,7 +174,7 @@ public class ViewAlbumActivity extends AppCompatActivity {
                         Cursor cursor5=db.rawQuery("select IId from Image_People where PId='"+cursor4.getString(0)+"' and IId in("+makePlaceholders(cursor3)+")",null);
                         if(cursor5.moveToFirst())
                         {
-  //                          Toast.makeText(ViewAlbumActivity.this,"cursor5:"+cursor5.getCount(),Toast.LENGTH_SHORT).show();
+                            //                          Toast.makeText(ViewAlbumActivity.this,"cursor5:"+cursor5.getCount(),Toast.LENGTH_SHORT).show();
 
                             cursor3=getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,new String[]{MediaStore.Images.Media.DATA},MediaStore.Images.Media._ID+" in("+makePlaceholders(cursor5)+")", null,null);
                             if(cursor3.moveToFirst())
@@ -167,7 +191,7 @@ public class ViewAlbumActivity extends AppCompatActivity {
             }
             else if (viewType.equals("peoplelocation"))
             {
- //               Toast.makeText(ViewAlbumActivity.this,"peoplelocation",Toast.LENGTH_SHORT).show();
+                //               Toast.makeText(ViewAlbumActivity.this,"peoplelocation",Toast.LENGTH_SHORT).show();
 
                 String pname=getIntent().getStringExtra("pname");
                 album=intent.getStringExtra("name");
@@ -181,12 +205,12 @@ public class ViewAlbumActivity extends AppCompatActivity {
 
                     if(cursor4.moveToFirst())
                     {
-  //                      Toast.makeText(ViewAlbumActivity.this,"cursor4:"+cursor4.getCount(),Toast.LENGTH_SHORT).show();
+                        //                      Toast.makeText(ViewAlbumActivity.this,"cursor4:"+cursor4.getCount(),Toast.LENGTH_SHORT).show();
 
                         Cursor cursor5=db.rawQuery("select IId from Image_People where PId='"+cursor4.getString(0)+"' and IId in("+makePlaceholders(cursor3)+")",null);
                         if(cursor5.moveToFirst())
                         {
-    //                        Toast.makeText(ViewAlbumActivity.this,"cursor5:"+cursor5.getCount(),Toast.LENGTH_SHORT).show();
+                            //                        Toast.makeText(ViewAlbumActivity.this,"cursor5:"+cursor5.getCount(),Toast.LENGTH_SHORT).show();
 
                             cursor3=getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,new String[]{MediaStore.Images.Media.DATA},MediaStore.Images.Media._ID+" in("+makePlaceholders(cursor5)+")", null,null);
                             if(cursor3.moveToFirst())
@@ -206,6 +230,7 @@ public class ViewAlbumActivity extends AppCompatActivity {
             {
                 ViewAlbumAdapter viewAlbumAdapter=new ViewAlbumAdapter(ViewAlbumActivity.this,arrayList);
                 gridView.setAdapter(viewAlbumAdapter);
+
             }
             else
             {
@@ -214,38 +239,79 @@ public class ViewAlbumActivity extends AppCompatActivity {
 
             getSupportActionBar().setSubtitle(arrayList.size()+"");
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            gridView.setLongClickable(true);
+
+
+gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+        CharSequence options[]=new CharSequence[]{"Move","Copy","Share"};
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(ViewAlbumActivity.this);
+        Toast.makeText(ViewAlbumActivity.this, "Long clicked", Toast.LENGTH_SHORT).show();
+        mBuilder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-                try
+            public void onClick(DialogInterface dialog, int which) {
+                if(which==0)
                 {
-                    Intent intent1 = new Intent(ViewAlbumActivity.this, ViewImageActivity.class);
-                    intent1.putStringArrayListExtra("paths",arrayList);
-                    intent1.putExtra("pos", position);
-                    startActivity(intent1);
-
-                }catch (Exception e)
-                {
-                    Toast.makeText(ViewAlbumActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ViewAlbumActivity.this, "First item clicked", Toast.LENGTH_SHORT).show();
                 }
+                if(which==1)
+                {
+                    Toast.makeText(ViewAlbumActivity.this, "Second item clicked", Toast.LENGTH_SHORT).show();
+                }
+                if(which==2)
+                {
+                    String path = String.valueOf(gridView.getItemAtPosition(position));
+                    Uri imageURI=Uri.parse(path);
 
+                    Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                    Uri screenshotUri = Uri.parse(imageURI.toString());
+
+                    sharingIntent.setType("image/png");
+                    sharingIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
+                    startActivity(Intent.createChooser(sharingIntent, "Share image using"));
+                }
             }
-        });
+        }).show();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        if (fab != null) {
-            fab.setOnClickListener(new View.OnClickListener() {
+        return true;
+    }
+});
+
+            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public void onClick(View view) {
-                   // Snackbar.make(view, intent.getStringExtra("album"), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+                    try
+                    {
+                        Intent intent1 = new Intent(ViewAlbumActivity.this, ViewImageActivity.class);
+                        intent1.putStringArrayListExtra("paths",arrayList);
+                        intent1.putExtra("pos", position);
+                        startActivity(intent1);
+
+                    }catch (Exception e)
+                    {
+                        Toast.makeText(ViewAlbumActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    }
+
                 }
             });
-        }
+
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            if (fab != null) {
+                fab.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // Snackbar.make(view, intent.getStringExtra("album"), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    }
+                });
+            }
         }catch (Exception e)
         {
             Toast.makeText(ViewAlbumActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
         }
     }
+
+
 
     String makePlaceholders(Cursor mCursor) {
         try {
@@ -295,6 +361,7 @@ public class ViewAlbumActivity extends AppCompatActivity {
         }
     }
 
+
     String makeAndPlaceholders(Cursor mCursor) {
         try {
             StringBuilder sb = new StringBuilder();
@@ -313,5 +380,4 @@ public class ViewAlbumActivity extends AppCompatActivity {
             return null;
         }
     }
-
 }

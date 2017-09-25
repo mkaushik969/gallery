@@ -13,6 +13,9 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
@@ -51,6 +54,8 @@ public class ViewAlbumAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return 0;
     }
+    // For a simple image list:
+
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {

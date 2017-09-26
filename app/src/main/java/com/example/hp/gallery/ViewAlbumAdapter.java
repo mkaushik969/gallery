@@ -14,6 +14,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class ViewAlbumAdapter extends BaseAdapter {
         width = displaymetrics.widthPixels;
 
         height=width=200;
-    }
+   }
 
     @Override
     public int getCount() {
@@ -74,10 +75,10 @@ public class ViewAlbumAdapter extends BaseAdapter {
             return imageView;
 
         }
-        catch (Exception e)
-        {
-            Toast.makeText(context,e.getMessage(),Toast.LENGTH_SHORT).show();
-        }
+    catch (Exception e)
+    {
+        Toast.makeText(context,e.getMessage(),Toast.LENGTH_SHORT).show();
+    }
         return imageView;
     }
 
@@ -123,30 +124,30 @@ public class ViewAlbumAdapter extends BaseAdapter {
         protected void onPostExecute(Bitmap bitmap) {
             try
             {
-                if (isCancelled()) {
-                    bitmap = null;
-                }
+            if (isCancelled()) {
+                bitmap = null;
+            }
 
-                if (imageViewReference != null) {
-                    ImageView imageView = imageViewReference.get();
-                    if (imageView != null) {
-                        if (bitmap != null) {
-                            imageView.setImageBitmap(bitmap);
-                        }
-                        //else missing pics
+            if (imageViewReference != null) {
+                ImageView imageView = imageViewReference.get();
+                if (imageView != null) {
+                    if (bitmap != null) {
+                        imageView.setImageBitmap(bitmap);
                     }
+                    //else missing pics
                 }
             }
-            catch(Exception e)
-            {
-                final Exception e1=e;
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(context,e1.getMessage(),Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+        }
+        catch(Exception e)
+        {
+            final Exception e1=e;
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(context,e1.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
         }
     }
 

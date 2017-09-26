@@ -20,6 +20,5 @@
         android:id="@+id/via_fab"
         android:src="@android:drawable/ic_dialog_info" />
 
-
 </FrameLayout>
 

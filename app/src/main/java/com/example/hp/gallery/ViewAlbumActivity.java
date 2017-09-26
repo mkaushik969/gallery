@@ -242,41 +242,41 @@ public class ViewAlbumActivity extends AppCompatActivity {
             gridView.setLongClickable(true);
 
 
-            gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                    CharSequence options[]=new CharSequence[]{"Move","Copy","Share"};
-                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(ViewAlbumActivity.this);
-                    Toast.makeText(ViewAlbumActivity.this, "Long clicked", Toast.LENGTH_SHORT).show();
-                    mBuilder.setItems(options, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if(which==0)
-                            {
-                                Toast.makeText(ViewAlbumActivity.this, "First item clicked", Toast.LENGTH_SHORT).show();
-                            }
-                            if(which==1)
-                            {
-                                Toast.makeText(ViewAlbumActivity.this, "Second item clicked", Toast.LENGTH_SHORT).show();
-                            }
-                            if(which==2)
-                            {
-                                String path = String.valueOf(gridView.getItemAtPosition(position));
-                                Uri imageURI=Uri.parse(path);
-
-                                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-                                Uri screenshotUri = Uri.parse(imageURI.toString());
-
-                                sharingIntent.setType("image/png");
-                                sharingIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
-                                startActivity(Intent.createChooser(sharingIntent, "Share image using"));
-                            }
-                        }
-                    }).show();
-
-                    return true;
+gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+        CharSequence options[]=new CharSequence[]{"Move","Copy","Share"};
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(ViewAlbumActivity.this);
+        Toast.makeText(ViewAlbumActivity.this, "Long clicked", Toast.LENGTH_SHORT).show();
+        mBuilder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(which==0)
+                {
+                    Toast.makeText(ViewAlbumActivity.this, "First item clicked", Toast.LENGTH_SHORT).show();
                 }
-            });
+                if(which==1)
+                {
+                    Toast.makeText(ViewAlbumActivity.this, "Second item clicked", Toast.LENGTH_SHORT).show();
+                }
+                if(which==2)
+                {
+                    String path = String.valueOf(gridView.getItemAtPosition(position));
+                    Uri imageURI=Uri.parse(path);
+
+                    Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                    Uri screenshotUri = Uri.parse(imageURI.toString());
+
+                    sharingIntent.setType("image/png");
+                    sharingIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
+                    startActivity(Intent.createChooser(sharingIntent, "Share image using"));
+                }
+            }
+        }).show();
+
+        return true;
+    }
+});
 
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override

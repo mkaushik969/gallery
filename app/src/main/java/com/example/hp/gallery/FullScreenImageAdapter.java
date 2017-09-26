@@ -73,34 +73,34 @@ public class FullScreenImageAdapter extends PagerAdapter {
         final Canvas canvas=new Canvas(tempBitmap);
         canvas.drawBitmap((MyBitmapCompressor.getCompressedImage(paths.get(position),720,720)),0,0,null);
         imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view)
-            {
-                FaceDetector faceDetector=new FaceDetector.Builder(context)
-                        .setTrackingEnabled(false)
-                        .setLandmarkType(FaceDetector.ALL_LANDMARKS)
-                        .build();
-                if(!faceDetector.isOperational())
-                {
-                    Toast.makeText(context, "Face detection not working..!!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Frame frame=new Frame.Builder().setBitmap(MyBitmapCompressor.getCompressedImage(paths.get(position),720,720)).build();
-                SparseArray<Face> sparseArray=faceDetector.detect(frame);
+                        @Override
+                            public void onClick(View view)
+                        {
+                            FaceDetector faceDetector=new FaceDetector.Builder(context)
+                                    .setTrackingEnabled(false)
+                                    .setLandmarkType(FaceDetector.ALL_LANDMARKS)
+                                    .build();
+                            if(!faceDetector.isOperational())
+                            {
+                                Toast.makeText(context, "Face detection not working..!!", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            Frame frame=new Frame.Builder().setBitmap(MyBitmapCompressor.getCompressedImage(paths.get(position),720,720)).build();
+                            SparseArray<Face> sparseArray=faceDetector.detect(frame);
 
-                for(int i=0;i<sparseArray.size();i++)
-                {
-                    Face face=sparseArray.valueAt(i);
-                    float x1=face.getPosition().x;
-                    float y1=face.getPosition().y;
-                    float x2=face.getPosition().x+face.getWidth();
-                    float y2=face.getPosition().y+face.getHeight();
-                    RectF rectF=new RectF(x1,y1,x2,y2);
-                    canvas.drawRoundRect(rectF,2,2,rectPaint);
-                }
-                imageView.setImageDrawable(new BitmapDrawable(Resources.getSystem(),tempBitmap));
-            }
-        });
+                            for(int i=0;i<sparseArray.size();i++)
+                            {
+                                Face face=sparseArray.valueAt(i);
+                                float x1=face.getPosition().x;
+                                float y1=face.getPosition().y;
+                                float x2=face.getPosition().x+face.getWidth();
+                                float y2=face.getPosition().y+face.getHeight();
+                                RectF rectF=new RectF(x1,y1,x2,y2);
+                                canvas.drawRoundRect(rectF,2,2,rectPaint);
+                            }
+                            imageView.setImageDrawable(new BitmapDrawable(Resources.getSystem(),tempBitmap));
+                        }
+                    });
         ((ViewPager)container).addView(viewlayout);
 
         return viewlayout;

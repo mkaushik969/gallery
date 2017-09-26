@@ -54,8 +54,6 @@ public class ViewAlbumAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return 0;
     }
-    // For a simple image list:
-
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -64,7 +62,6 @@ public class ViewAlbumAdapter extends BaseAdapter {
 
         try {
 
-            //    imageView.setLayoutParams(new GridView.LayoutParams(GridView.LayoutParams.WRAP_CONTENT,GridView.LayoutParams.WRAP_CONTENT));
             imageView.setLayoutParams(new GridView.LayoutParams(width, height));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 

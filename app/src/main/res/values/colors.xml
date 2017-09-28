@@ -9,8 +9,8 @@
     <color name="red">#ff0000</color>
     <color name="white">#ffffff</color>
 
-    <color name="colorGradientStart">#66ffff</color>
-    <color name="colorGradientCenter">#6699ff</color>
+    <color name="colorGradientStart">#ffcc99</color>
+    <color name="colorGradientCenter">#ffcc66</color>
     <color name="colorGradientEnd">#cc66ff</color>
 
     <color name="colorGradientStart1">#66ff66</color>

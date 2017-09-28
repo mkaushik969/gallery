@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@drawable/background_gradient"
     tools:context="com.example.hp.gallery.ViewAlbumActivity">
 
     <android.support.design.widget.AppBarLayout

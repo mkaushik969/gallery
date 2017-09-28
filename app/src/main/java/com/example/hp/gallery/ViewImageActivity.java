@@ -7,13 +7,16 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.logging.Handler;
 
 import static com.example.hp.gallery.FullScreenImageAdapter.*;
 
@@ -22,11 +25,11 @@ public class ViewImageActivity extends AppCompatActivity {
     ArrayList<String> paths;
     ScaleGestureDetector sgd;
     Cursor cursor,cursor1;
+    int i=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
-
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_view_image);
 
@@ -46,6 +49,11 @@ public class ViewImageActivity extends AppCompatActivity {
             viewPager.setCurrentItem(pos);
 
 
+            String val=String.valueOf(viewPager.getCurrentItem());
+            Log.d("VAL",val);
+
+
+
             if (fab != null) {
                 fab.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -58,8 +66,6 @@ public class ViewImageActivity extends AppCompatActivity {
                     }
                 });
             }
-
-
         }
         catch (Exception e)
         {
@@ -72,7 +78,7 @@ public class ViewImageActivity extends AppCompatActivity {
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         if(getSupportActionBar().isShowing())
-        getSupportActionBar().hide();
+            getSupportActionBar().hide();
 
         sgd.onTouchEvent(event);
         return true;

@@ -13,5 +13,9 @@
     <color name="colorGradientCenter">#6699ff</color>
     <color name="colorGradientEnd">#cc66ff</color>
 
+    <color name="colorGradientStart1">#66ff66</color>
+    <color name="colorGradientCenter1">#ff6600</color>
+    <color name="colorGradientEnd1">#ffff66</color>
+
     <color name="black_overlay" id="@+id/color1">#66000000</color>
 </resources>

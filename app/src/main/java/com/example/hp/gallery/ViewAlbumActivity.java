@@ -1,27 +1,36 @@
 package com.example.hp.gallery;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.support.annotation.IntegerRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -29,8 +38,11 @@ import android.widget.Toast;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
+
+import jp.wasabeef.blurry.Blurry;
 
 public class ViewAlbumActivity extends AppCompatActivity {
 
@@ -38,23 +50,27 @@ public class ViewAlbumActivity extends AppCompatActivity {
     Cursor cursor,cursor1;
     ArrayList<String> arrayList;
     String album,viewType;
+    boolean temp=false;
+    int value=0;
 
     Uri imageURI = null;
+    boolean pos[];
 
     private GoogleApiClient mGoogleApiClient;
     private Bitmap mBitmapToSave;
-
+    ArrayList<String> imageSelectedPaths=null;
     public static final int GALLERY_INTENT=1234;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try
         {
-
+            imageSelectedPaths=new ArrayList<>();
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_view_album);
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
+            Log.d("TTT","Array List"+imageSelectedPaths.toString());
 
             final Intent intent=getIntent();
             viewType=intent.getStringExtra("type");
@@ -229,6 +245,7 @@ public class ViewAlbumActivity extends AppCompatActivity {
             if(arrayList.size()!=0)
             {
                 ViewAlbumAdapter viewAlbumAdapter=new ViewAlbumAdapter(ViewAlbumActivity.this,arrayList);
+
                 gridView.setAdapter(viewAlbumAdapter);
 
             }
@@ -241,10 +258,14 @@ public class ViewAlbumActivity extends AppCompatActivity {
 
             gridView.setLongClickable(true);
 
+            Log.d("HHH","TEMP:"+ temp+"");
+            if(temp==false) {
+                clickImage(value);
+            }
 
-gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-    @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+            gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
         CharSequence options[]=new CharSequence[]{"Move","Copy","Share"};
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(ViewAlbumActivity.this);
         Toast.makeText(ViewAlbumActivity.this, "Long clicked", Toast.LENGTH_SHORT).show();
@@ -253,7 +274,7 @@ gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 if(which==0)
                 {
-                    Toast.makeText(ViewAlbumActivity.this, "First item clicked", Toast.LENGTH_SHORT).show();
+                  Toast.makeText(ViewAlbumActivity.this, "First item clicked", Toast.LENGTH_SHORT).show();
                 }
                 if(which==1)
                 {
@@ -278,23 +299,7 @@ gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
     }
 });
 
-            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-                    try
-                    {
-                        Intent intent1 = new Intent(ViewAlbumActivity.this, ViewImageActivity.class);
-                        intent1.putStringArrayListExtra("paths",arrayList);
-                        intent1.putExtra("pos", position);
-                        startActivity(intent1);
 
-                    }catch (Exception e)
-                    {
-                        Toast.makeText(ViewAlbumActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
-                    }
-
-                }
-            });
 
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
             if (fab != null) {
@@ -311,6 +316,116 @@ gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
         }
     }
 
+    private void clickImage(final int val) {
+        Log.d("HHH", "clickImage: "+val+"");
+
+            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    try {
+                        if(val==0) {
+                            Intent intent1 = new Intent(ViewAlbumActivity.this, ViewImageActivity.class);
+                            intent1.putStringArrayListExtra("paths", arrayList);
+                            intent1.putExtra("pos", position);
+                            startActivity(intent1);
+                        }
+
+                    } catch (Exception e) {
+                        Toast.makeText(ViewAlbumActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_album,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem register = menu.findItem(R.id.createPDF);
+        if(imageSelectedPaths.size()>=1)
+        {
+            register.setVisible(true);
+        }
+        else {
+            register.setVisible(false);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d("TTT","OnOptions"+imageSelectedPaths.toString());
+
+        if(item.getItemId()==R.id.select)
+        {
+            multipleSelection(gridView,arrayList);
+            temp=true;
+            value=1;
+            Log.d("HHH", "onCreateOptions: "+value+"");
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /*
+    * public Bitmap getBitmap(String path) {
+try {
+    Bitmap bitmap=null;
+    File f= new File(path);
+    BitmapFactory.Options options = new BitmapFactory.Options();
+    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+
+        bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, options);
+     image.setImageBitmap(bitmap);
+} catch (Exception e) {
+    e.printStackTrace();
+    return null;
+}}*/
+
+    private void multipleSelection(final GridView mGridView, final ArrayList<String> arrayList) {
+        Log.d("TAG","Multiple Selection Method");
+        Log.d("TTT", arrayList.toString());
+        Log.d("TTT",mGridView.getItemAtPosition(0).toString());
+        mGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @SuppressLint("NewApi")
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("TTT",mGridView.getItemAtPosition(position).toString());
+
+
+                try{
+                    //if(pos[position]==false) {
+                    temp=true;
+                    Log.d("HHH", "Temp in method: "+temp+"");
+
+                    imageSelectedPaths.add(mGridView.getItemAtPosition(position).toString());
+                        mGridView.getChildAt(position).setPadding(20, 20, 20, 20);
+                        mGridView.getChildAt(position).setBackgroundColor(Color.RED);
+//                    }
+//                    else {
+//                        imageSelectedPaths.remove(mGridView.getItemAtPosition(position).toString());
+//                        mGridView.getChildAt(position).setPadding(0,0,0,0);
+//                        pos[position]=false;
+//                    }
+                    String path=mGridView.getItemAtPosition(position).toString();
+                    File f= new File(path);
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                    Bitmap bitmap=null;
+                    bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, options);
+                    Blurry.with(ViewAlbumActivity.this).from(bitmap);
+                    Log.d("HHH", "onItemLongClick: "+imageSelectedPaths.toString());
+                }
+                catch (Exception e){}
+                return false;
+            }
+        });
+    }
 
 
     String makePlaceholders(Cursor mCursor) {

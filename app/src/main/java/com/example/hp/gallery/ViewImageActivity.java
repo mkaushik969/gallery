@@ -30,7 +30,6 @@ public class ViewImageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
-
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_view_image);
 

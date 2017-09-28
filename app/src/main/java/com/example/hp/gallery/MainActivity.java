@@ -340,7 +340,6 @@ public class MainActivity extends AppCompatActivity {
                         MyImage image=new MyImage(MainActivity.this,cursor2.getString(0));
                         image.create();
 
-
                     }while (cursor2.moveToNext());
 
                     editor.putBoolean("saved",true);
@@ -437,7 +436,5 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     }
-
-
 
 }
